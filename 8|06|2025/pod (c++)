@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int>ans;
+
+    void fn(int n,int idx){
+        if(idx>n)return;
+
+        ans.push_back(idx);
+        fn(n,idx*10);
+        if((idx+1)%10)
+        fn(n,idx+1);
+    }
+
+    vector<int> lexicalOrder(int n) {
+        fn(n,1);
+        return ans;
+    }
+};
