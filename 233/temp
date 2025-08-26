@@ -1,0 +1,66 @@
+class Solution {
+public:
+    long long rev_fn(long long num) {
+        long long ans = 0;
+        while (num) {
+            ans = ans * 10 + (num % 10);
+            num /= 10;
+        }
+        return ans;
+    }
+
+    void fn(long long num,set<int>& st, int n) {
+        if (num > n) return;
+
+        for (int i = 0; i <= 9; ++i) {
+
+            long long next = num * 10 + i;
+            if (next > n) break;            
+
+            if (st.insert((int)next).second) {     
+                long long rev = rev_fn(next);
+                if (rev <= n) st.insert((int)rev);
+                fn(next, st, n);                  
+            }
+        }
+    }
+
+    int solve(int n){
+        long long factor=1;
+        long long ans=0;
+
+        while(factor<=n){
+            long long higher=n/(factor*10);
+            long long curr=(n/factor)%10;
+            long long low=n%factor;
+
+            if(curr==0){
+                ans+=(higher*factor);
+            }else if(curr==1){
+                ans+=(higher*factor + low+1);
+            }else{
+                ans+=( (higher+1)*factor);
+            }
+            factor*=10;
+        }
+        return ans;
+    }
+
+    int countDigitOne(int n) {
+        return solve(n);
+        if (n == 0) return 0;
+        set<int> st;
+        st.insert(1);           
+        fn(1, st, n);
+
+        int ans = 0;
+        for (int x : st) {
+            int tmp = x;
+            while (tmp) {
+                if (tmp % 10 == 1) ++ans;
+                tmp /= 10;
+            }
+        }
+        return ans;
+    }
+};
